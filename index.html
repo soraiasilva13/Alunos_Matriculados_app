@@ -1,0 +1,332 @@
+{% extends 'base.html' %}
+{% block content %}
+<header>
+   <h1>Base de Dados: Alunos Matriculados 2017/2018</h1>
+</header>
+
+<h2>Sobre</h2>
+<p> Esta aplicação web documenta várias informações relativas ao dataset DGECC_AlunosMatriculados_2017_2018
+database. O seu desenvolvimento foi realizado através de
+<a href="https://docs.python.org/3/library/sqlite3.html">sqlite3</a>,
+<a href="https://flask.palletsprojects.com">Flask</a>, e
+<a href="https://jinja.palletsprojects.com">Jinja</a>.
+</p>
+
+<h2>Estatísticas da Base de Dados</h2>
+<p> Na seguinte tabela apresentam-se estatísticas sobre alguns parâmetros do dataset em estudo.
+
+</p>
+<table>
+<tr>
+  <th>Items</th>
+  <th>Count</th>
+</tr>
+<tr>
+  <td>Entidades</td>
+  <td>{{ stats.n_entidades }}</td>
+</tr>
+<tr>
+  <td>Regiões (NUTSII)</td>
+  <td>{{ stats.n_nutsii }}</td>
+</tr>
+<tr>
+  <td>Entidades Intermunicipais (NUTSIII)</td>
+  <td>{{ stats.n_nutsiii }}</td>
+</tr>
+<tr>
+  <td>Distritos</td>
+  <td>{{ stats.n_distritos }}</td>
+</tr>
+<tr>
+  <td>Concelhos</td>
+  <td>{{ stats.n_concelhos }}</td>
+</tr>
+
+<tr>
+  <td>Agrupamentos</td>
+  <td>{{ stats.n_agrupamento }}</td>
+</tr>
+
+<tr>
+  <td>Escolas</td>
+  <td>{{ stats.n_escola }}</td>
+</tr>
+<tr>
+  <td>Organização</td>
+  <td>{{ stats.n_organizacoes }}</td>
+</tr>
+<tr>
+  <td>Oferta</td>
+  <td>{{ stats.n_ofertas }}</td>
+</tr>
+<tr>
+  <td>Ciclo de Estudos</td>
+  <td>{{ stats.n_ciclos }}</td>
+</tr>
+<tr>
+  <td>Nível de Ensino</td>
+  <td>{{ stats.n_niveis }}</td>
+</tr>
+<tr>
+  <td>Cursos</td>
+  <td>{{ stats.n_cursos }}</td>
+</tr>
+<tr>
+  <td>Ano de Escolaridade</td>
+  <td>{{ stats.n_anoEscolaridade }}</td>
+</tr>
+<tr>
+  <td>Alunos Matriculados</td>
+  <td>{{ stats.n_inscricoes }}</td>
+</tr>
+</table>
+
+<h2>Gráficos</h2>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div>
+
+<div style="text-align: left; margin-top:20px;">
+  <p>
+    Total de alunos por nível de ensino:<p>
+</div>  
+<canvas id="myChart1" width="400" height="400"></canvas>
+
+
+<div style="text-align: left; margin-top:20px;">
+  <p> <p>
+  <p>Total de alunos por sexo:<p>
+</div>  
+<canvas id="myChart2" width="400" height="400"></canvas>
+
+
+<div style="text-align: left; margin-top:20px;">
+  <p>Total de entidades por natureza:<p>
+</div>  
+<canvas id="myChart3" width="400" height="400"></canvas>
+<div>
+<script>
+  fetch('/data')
+  .then(response => response.json())
+  .then(data => {
+    const ctx = document.getElementById('myChart1').getContext('2d');
+    const labels = data.map(item => item.NivelEnsino);
+    const values = data.map(item => item.TotalAlunos);
+
+    new Chart(ctx, {
+      type: 'bar', // or other chart type
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Total Alunos',
+          data: values,
+          backgroundColor: [
+              'rgba(224, 255, 255, 1)',
+              'rgba(173, 216, 230, 1)',
+              'rgba(211,211,211, 1)',
+              'rgba(72, 61, 139, 1)'
+          ],
+          borderColor: [
+              'rgba(224, 255, 255, 1)',
+              'rgba(173, 216, 230, 1)',
+              'rgba(211,211,211, 1)',
+              'rgba(72, 61, 139, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          x: {
+            ticks: {
+              color: '#FFFFFF' // Change X-axis label text color to white
+            },
+            grid: {
+              color: '#FFFFFF' // Change X-axis grid lines color to white
+            }
+          },
+          y: {
+            ticks: {
+              color: '#FFFFFF' // Change Y-axis label text color to white
+            },
+            grid: {
+              color: '#FFFFFF' // Change Y-axis grid lines color to white
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: '#FFFFFF' // Change legend text color to white
+            }
+          },
+          title: {
+            display: true,
+            text: 'Total Alunos',
+            color: '#FFFFFF', // Change title text color to white
+            font: {
+              size: 18
+            }
+          },
+          tooltip: {
+            titleColor: '#FFFFFF', // Change tooltip title color to white
+            bodyColor: '#FFFFFF'  // Change tooltip body text color to white
+          }
+        }
+      }
+    });
+  })
+  .catch(error => console.error('Error loading data:', error));
+
+
+
+
+
+
+    fetch('/sexo')
+    .then(response => response.json())
+    .then(data => {
+      const ctx = document.getElementById('myChart2').getContext('2d');
+      const labels = data.map(item => item.Sexo);
+      const values = data.map(item => item.TotalAlunos);
+
+      new Chart(ctx, {
+        type: 'bar', // or other chart type
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Total Alunos',
+            data: values,
+            backgroundColor: [
+            'rgba(173, 216, 230, 1)',
+            'rgba(211,211,211, 1)'
+                ],
+            borderColor: [
+            'rgba(173, 216, 230, 1)',
+            'rgba(211,211,211, 1)'
+            ],
+            borderWidth: 1,
+            barPercentage: 0.5, // Set thinner bars for this dataset
+            categoryPercentage: 0.8 // Adjust spacing between categories
+          }]
+        },
+        options: {
+        scales: {
+          x: {
+            ticks: {
+              color: '#FFFFFF' // Change X-axis label text color to white
+            },
+            grid: {
+              color: '#FFFFFF' // Change X-axis grid lines color to white
+            }
+          },
+          y: {
+            ticks: {
+              color: '#FFFFFF' // Change Y-axis label text color to white
+            },
+            grid: {
+              color: '#FFFFFF' // Change Y-axis grid lines color to white
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: '#FFFFFF' // Change legend text color to white
+            }
+          },
+          title: {
+            display: true,
+            text: 'Total Alunos',
+            color: '#FFFFFF', // Change title text color to white
+            font: {
+              size: 18
+            }
+          },
+          tooltip: {
+            titleColor: '#FFFFFF', // Change tooltip title color to white
+            bodyColor: '#FFFFFF'  // Change tooltip body text color to white
+          }
+        }
+      }
+    });
+  })
+  .catch(error => console.error('Error loading data:', error));
+
+
+    fetch('/natureza')
+    .then(response => response.json())
+    .then(data => {
+      const ctx = document.getElementById('myChart3').getContext('2d');
+      const labels = data.map(item => item.Natureza);
+      const values = data.map(item => item.TotalEntidades);
+
+      new Chart(ctx, {
+        type: 'bar', // or other chart type
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Total Entidades',
+            data: values,
+            backgroundColor: [
+            'rgba(224, 255, 255, 1)',
+            'rgba(173, 216, 230, 1)',
+            'rgba(211,211,211, 1)'
+                ],
+            borderColor: [
+            'rgba(224, 255, 255, 1)',
+            'rgba(173, 216, 230, 1)',
+            'rgba(211,211,211, 1)'
+            ],
+            borderWidth: 1,
+            barPercentage: 0.8, // Set thinner bars for this dataset
+            categoryPercentage: 0.8 // Adjust spacing between categories
+          }]
+        },
+        options: {
+        scales: {
+          x: {
+            ticks: {
+              color: '#FFFFFF' // Change X-axis label text color to white
+            },
+            grid: {
+              color: '#FFFFFF' // Change X-axis grid lines color to white
+            }
+          },
+          y: {
+            ticks: {
+              color: '#FFFFFF' // Change Y-axis label text color to white
+            },
+            grid: {
+              color: '#FFFFFF' // Change Y-axis grid lines color to white
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: '#FFFFFF' // Change legend text color to white
+            }
+          },
+          title: {
+            display: true,
+            text: 'Total Alunos',
+            color: '#FFFFFF', // Change title text color to white
+            font: {
+              size: 18
+            }
+          },
+          tooltip: {
+            titleColor: '#FFFFFF', // Change tooltip title color to white
+            bodyColor: '#FFFFFF'  // Change tooltip body text color to white
+          }
+        }
+      }
+    });
+  })
+  .catch(error => console.error('Error loading data:', error));
+
+</script>
+
+{% endblock %}
+nivel
+index

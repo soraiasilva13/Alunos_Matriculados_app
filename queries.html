@@ -1,0 +1,458 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<header>
+    <h1>Queries</h1>
+</header>
+
+<h2>Query 1</h2>
+<h3>Listar os cursos disponíveis</h3>
+<details>
+    <summary>
+        Output:
+    </summary>
+    <p>
+        <table>
+            <tr>
+                <th>Curso</th>
+            </tr>
+            {% for item in stats.n_query1 %}
+            <tr>
+                <td>{{ item }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </p>
+  </details>
+
+<details>
+    <summary>
+        Código:
+    </summary>
+    <p class="code-block">
+        SELECT Curso<br>FROM Cursos;
+    </p>
+</details>
+
+<h2>Query 2</h2>
+<h3>Número de matrículas por curso</h3>
+<details>
+    <summary>
+        Output:
+    </summary>
+    <p>
+        <table>
+            <tr>
+                <th>Curso</th>
+                <th>Numero Matriculas</th>
+            </tr>
+            {% for item in stats.n_query2 %}
+            <tr>
+                <td>{{ item.Curso }}</td>
+                <td>{{ item.NumeroMatriculas }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </p>
+</details>
+
+<details>
+    <summary>
+        Código:
+    </summary>
+    <p class="code-block">
+        SELECT Curso, COUNT(*) AS NumeroMatriculas <br> 
+        FROM Inscricoes I join Cursos C on I.CODCurso = C.CODCurso <br>
+        GROUP BY C.CODCurso;
+    </p>
+</details>
+
+<h2>Query 3</h2>
+<h3>Contar o número total de alunos matriculados em cada entidade, ordenando por maior número de alunos matriculados</h3>
+<details>
+    <summary>
+        Output:
+    </summary>
+    <p>
+        <table>
+            <tr>
+                <th>Entidade</th>
+                <th>Total Alunos</th>
+            </tr>
+            {% for item in stats.n_query3 %}
+            <tr>
+                <td>{{ item.Entidade }}</td>
+                <td>{{ item.TotalAlunos }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </p>
+</details>
+
+<details>
+    <summary>
+        Código:
+    </summary>
+    <p class="code-block">
+        SELECT E.Entidade, SUM(I.NumeroAlunosMatriculados) AS TotalAlunos <br>
+        FROM Inscricoes I JOIN Entidade E on I.CODEntidade = E.CODEntidade <br>
+        GROUP BY E.CODEntidade <br>
+        ORDER BY TotalAlunos DESC; <br>    
+    </p>
+</details>
+
+<h2>Query 4</h2>
+<h3>Número de alunos matriculados em cada escola privada</h3>
+<details>
+    <summary>
+        Output:
+    </summary>
+    <p>
+        <table>
+            <tr>
+                <th>Codentidade</th>
+                <th>Escola</th>
+                <th>Total Alunos</th>
+            </tr>
+            {% for item in stats.n_query4 %}
+            <tr>
+                <td>{{ item.CODEntidade }}</td>
+                <td>{{ item.Escola }}</td>
+                <td>{{ item.TotalAlunos }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </p>
+</details>
+
+<details>
+    <summary>
+        Código:
+    </summary>
+    <p class="code-block">
+        SELECT DISTINCT I.codentidade, Es.Escola, sum(I.NumeroAlunosMatriculados) <br>
+        FROM Inscricoes I JOIN Entidade E ON E.CODEntidade = I.CODEntidade <br>
+                  JOIN Escola Es ON E.CODEscola = Es.CODEscola <br>
+        GROUP BY I.CODEntidade <br>
+        HAVING E.natureza LIKE '%privado%'; <br>      
+    </p>
+</details>
+
+<h2>Query 5</h2>
+<h3>Número escolas públicas e privadas em cada distrito</h3>
+<details>
+    <summary>
+        Output:
+    </summary>
+    <p>
+        <table>
+            <tr>
+                <th>Distrito</th>
+                <th>Total Privadas</th>
+                <th>Total Públicas</th>
+            </tr>
+            {% for item in stats.n_query5 %}
+            <tr>
+                <td>{{ item.Distrito }}</td>
+                <td>{{ item.TotalPrivadas }}</td>
+                <td>{{ item.TotalPublicas }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </p>
+</details>
+
+<details>
+    <summary>
+        Código:
+    </summary>
+    <p class="code-block">
+        SELECT D.distrito, count(CASE WHEN E.Natureza LIKE '%Privado%' THEN E.CODEscola END) AS total_privadas, count(CASE WHEN E.Natureza LIKE '%Público%' THEN E.CODEscola END) AS total_publicas <br>
+        FROM Distrito D JOIN Concelho C ON D.CODDistrito = C.CODDistrito <br>
+             JOIN Localizacao L ON L.CODConcelho = C.CODConcelho <br>
+             JOIN Entidade E ON L.CODEntidade = E.CODEntidade <br>
+        GROUP BY D.distrito; <br>      
+    </p>
+</details>
+
+<h2>Query 6</h2>
+<h3>Identificar o concelho com o maior número de alunos matriculados</h3>
+<details>
+    <summary>
+        Output:
+    </summary>
+    <p>
+        <table>
+            <tr>
+                <th>Concelho</th>
+                <th>Max Alunos</th>
+            </tr>
+            {% for item in stats.n_query6 %}
+            <tr>
+                <td>{{ item.Concelho }}</td>
+                <td>{{ item.MaxAlunos }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </p>
+</details>
+
+<details>
+    <summary>
+        Código:
+    </summary>
+    <p class="code-block">
+        WITH nrinscritosconcelho as ( <br>
+            SELECT C.Concelho, SUM(NumeroAlunosMatriculados) AS TotalAlunos <br> 
+            FROM Localizacao L JOIN Inscricoes I ON L.CODEntidade = I.CODEntidade <br>
+            JOIN Concelho C ON L.CODConcelho = C.CODConcelho <br>
+            GROUP BY L.CODConcelho) <br>
+            <br>
+            SELECT Concelho, MAX(TotalAlunos) <br>
+            FROM nrinscritosconcelho; <br>            
+    </p>
+</details>
+
+<h2>Query 7</h2>
+<h3>Ordem descendente das regiões nutsii que têm mais escolas</h3>
+<details>
+    <summary>
+        Output:
+    </summary>
+    <p>
+        <table>
+            <tr>
+                <th>NUTSII</th>
+                <th>Total Escolas</th>
+            </tr>
+            {% for item in stats.n_query7 %}
+            <tr>
+                <td>{{ item.NUTSII }}</td>
+                <td>{{ item.TotalEscolas }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </p>
+</details>
+
+<details>
+    <summary>
+        Código:
+    </summary>
+    <p class="code-block">
+        SELECT COUNT(E.CODEscola) AS total_escolas, NII.NUTSII <br>
+        FROM Entidade E JOIN Localizacao L ON L.CODEntidade = E.CODEntidade <br>
+                JOIN Concelho C ON L.CODConcelho = C.CODConcelho <br>
+                JOIN NUTSIII NIII ON C.CODNUTSIII = NIII.CODNUTSIII <br>
+                JOIN NUTSII NII ON NIII.CODNUTSII = NII.CODNUTSII <br>
+        GROUP BY NII.NUTSII <br>
+        ORDER BY total_escolas DESC; <br>       
+    </p>
+</details>
+
+<h2>Query 8</h2>
+<h3>Número de alunos matriculados por nível de ensino, ordenando por maior número de alunos matriculados</h3>
+<details>
+    <summary>
+        Output:
+    </summary>
+    <p>
+        <table>
+            <tr>
+                <th>Nível de Ensino</th>
+                <th>Total de Alunos</th>
+            </tr>
+            {% for item in stats.n_query8 %}
+            <tr>
+                <td>{{ item.NivelEnsino }}</td>
+                <td>{{ item.TotalAlunos }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </p>
+</details>
+
+<details>
+    <summary>
+        Código:
+    </summary>
+    <p class="code-block">
+        SELECT N.NivelEnsino, SUM(NumeroAlunosMatriculados) AS TotalAlunos <br>
+        FROM Inscricoes I JOIN Nivelensino N ON I.CODNivelEnsino = N.CODNivelEnsino <br>
+        GROUP BY N.CODNivelEnsino; <br>      
+    </p>
+</details>
+
+<h2>Query 9</h2>
+<h3>Número de alunos por sexo em cada concelho</h3>
+<details>
+    <summary>
+        Output:
+    </summary>
+    <p>
+        <table>
+            <tr>
+                <th>Concelho</th>
+                <th>Sexo</th>
+                <th>Total de Alunos</th>
+            </tr>
+            {% for item in stats.n_query9 %}
+            <tr>
+                <td>{{ item.Concelho }}</td>
+                <td>{{ item.Sexo }}</td>
+                <td>{{ item.TotalAlunos }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </p>
+</details>
+
+<details>
+    <summary>
+        Código:
+    </summary>
+    <p class="code-block">
+        SELECT C.Concelho, S.Sexo, SUM(NumeroAlunosMatriculados) AS TotalAlunos <br>
+        FROM Localizacao L JOIN Inscricoes I ON L.CODEntidade = I.CODEntidade <br>
+        JOIN Sexo S ON I.CODSexo = S.CODSexo <br>
+        JOIN Concelho C ON L.CODConcelho = C.CODConcelho <br>
+        GROUP BY L.CODConcelho, S.CODSexo; <br>
+    </p>
+</details>
+
+<h2>Query 10</h2>
+<h3>Percentagem de alunos matriculados em escolas Públicas por distrito</h3>
+<details>
+    <summary>
+        Output:
+    </summary>
+    <p>
+        <table>
+            <tr>
+                <th>Distrito</th>
+                <th>Natureza</th>
+                <th>PCT Público</th>
+            </tr>
+            {% for item in stats.n_query10 %}
+            <tr>
+                <td>{{ item.Distrito }}</td>
+                <td>{{ item.Natureza }}</td>
+                <td>{{ item.PCTPublico }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </p>
+</details>
+
+<details>
+    <summary>
+        Código:
+    </summary>
+    <p class="code-block">
+        WITH NrAlunos AS ( <br>
+            SELECT D.CODDistrito, SUM(I.NumeroAlunosMatriculados) AS NumeroAlunosMatriculados <br>
+            FROM Inscricoes I JOIN Entidade E ON I.CODEntidade = E.CODEntidade <br>
+                      JOIN Concelho C ON L.CODConcelho = C.CODConcelho <br>
+                      JOIN Distrito D ON C.CODDistrito = D.CODDistrito <br>
+                      JOIN Localizacao L ON E.CODEntidade = L.CODEntidade <br>
+            GROUP BY D.CODDistrito) <br>
+            <br>
+            SELECT D.Distrito, E.Natureza, 100* SUM(I.NumeroAlunosMatriculados)/ NA.NumeroAlunosMatriculados as PCTPublico <br>
+            FROM Inscricoes I JOIN Entidade E ON I.CODEntidade = E.CODEntidade <br>
+                      JOIN Concelho C ON L.CODConcelho = C.CODConcelho <br>
+                      JOIN Distrito D ON C.CODDistrito = D.CODDistrito <br>
+                      JOIN Localizacao L ON E.CODEntidade = L.CODEntidade <br>
+                      JOIN NrAlunos NA ON D.CODDistrito = NA.CODDistrito <br>
+            WHERE E.Natureza LIKE '%Público%' <br>
+            GROUP BY D.CODDistrito, E.Natureza <br>
+            ORDER BY D.CODDistrito, E.Natureza; <br>           
+    </p>
+</details>
+
+<h2>Query 11</h2>
+<h3>Qual o curso com maior discrepância entre o sexo feminino e masculino</h3>
+<details>
+    <summary>
+        Output:
+    </summary>
+    <p>
+        <table>
+            <tr>
+                <th>Curso</th>
+                <th>Diferença</th>
+            </tr>
+            {% for item in stats.n_query11 %}
+            <tr>
+                <td>{{ item.Curso }}</td>
+                <td>{{ item.Diferenca }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </p>
+</details>
+
+<details>
+    <summary>
+        Código:
+    </summary>
+    <p class="code-block">
+        WITH alunos_por_sexo AS ( <br>
+            SELECT C.curso, sum(CASE WHEN S.Sexo = 'Homens' THEN I.NumeroAlunosMatriculados ELSE 0 END) AS total_masculino, sum(CASE WHEN S.Sexo = 'Mulheres' THEN I.NumeroAlunosMatriculados ELSE 0 END) AS total_feminino <br>
+            FROM inscricoes I JOIN Cursos C ON I.CODCurso = C.CODCurso <br>
+                     JOIN Sexo S ON I.CODSexo = S.CODSexo <br>
+            GROUP BY C.Curso), <br>
+            diferencas AS ( <br>
+            SELECT curso, abs(total_masculino-total_feminino) AS diferenca <br>
+            FROM alunos_por_sexo) <br>
+            <br>
+            SELECT curso, diferenca <br>
+            FROM diferencas <br>
+            WHERE diferenca = (SELECT max(diferenca) FROM diferencas); <br>            
+    </p>
+</details>
+
+<h2>Query 12</h2>
+<h3>Qual a entidade, em cada concelho, que tem o maior número de alunos inscritos</h3>
+<details>
+    <summary>
+        Output:
+    </summary>
+    <p>
+        <table>
+            <tr>
+                <th>Concelho</th>
+                <th>Entidade</th>
+                <th>Max Alunos</th>
+            </tr>
+            {% for item in stats.n_query12 %}
+            <tr>
+                <td>{{ item.Concelho }}</td>
+                <td>{{ item.Entidade }}</td>
+                <td>{{ item.MaxAlunos }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </p>
+</details>
+
+<details>
+    <summary>
+        Código:
+    </summary>
+    <p class="code-block">
+        WITH NrAlunosEntidade AS ( <br>
+        SELECT C.concelho, E.entidade, SUM(I.NumeroAlunosMatriculados) AS nr_alunos <br>
+        FROM Inscricoes I JOIN Entidade E ON I.CODEntidade = E.CODEntidade <br>
+                                    JOIN Localizacao L ON E.CODEntidade = L.CODEntidade <br>
+                                    JOIN Concelho C ON L.CODConcelho = C.CODConcelho <br>
+        GROUP BY C.CODConcelho, I.CODEntidade) <br>
+        <br>
+        SELECT Concelho, Entidade, MAX(nr_alunos) as MAXAlunos <br>
+        FROM NrAlunosEntidade <br>
+        GROUP BY Concelho <br>
+        ORDER BY MAXAlunos DESC; <br>
+
+    </p>
+</details>
+
+{% endblock %}

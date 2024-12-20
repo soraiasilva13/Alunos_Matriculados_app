@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ table_name }}</h1>
+<table>
+    <thead>
+        <tr>
+            {% for column in table_data[0].keys() %}
+                <th><b>{{ column }}</b></th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in table_data %}
+            <tr>
+                {% for column in row.keys() %}
+                    <td>
+                        {% if column|startswith('cod') or column|endswith('id') %}
+                            <a href="/list/{{ table_name }}/{{ row[column] }}">{{ row[column] }}</a>
+                        {% else %}
+                            {{ row[column] }}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

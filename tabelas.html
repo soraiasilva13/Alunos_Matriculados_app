@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!--
+{% for entity in [
+   {'name': 'Entidades', 'url': 'Entidade'},
+   {'name': 'Localização', 'url': 'Localizacao'},
+   {'name': 'Concelho', 'url': 'Concelho'},
+   {'name': 'Distrito', 'url': 'Distrito'},
+   {'name': 'Organização', 'url': 'Organizacao'},
+   {'name': 'Escola', 'url': 'Escola'},
+   {'name': 'Agrupamento', 'url': 'Agrupamento'},
+   {'name': 'Escola Sede', 'url': 'EscolaSede'},
+   {'name': 'NutsIII', 'url': 'NUTSIII'},
+   {'name': 'NutsII', 'url': 'NUTSII'},
+   {'name': 'Inscrições', 'url': 'Inscricoes'},
+   {'name': 'Ano de Escolaridade', 'url': 'AnoEscolaridade'},
+   {'name': 'Nível de Ensino', 'url': 'NivelEnsino'},
+   {'name': 'Oferta', 'url': 'Oferta'},
+   {'name': 'Cursos', 'url': 'Cursos'},
+   {'name': 'Orientação', 'url': 'Orientacao'},
+   {'name': 'Ciclo de Estudos', 'url': 'CicloEstudos'},
+   {'name': 'Sexo', 'url': 'Sexo'}
+] %}
+<h2>{{ entity.name }}</h2>
+<p><a href="/list/{{ entity.url }}/">List all</a></p>
+<p>Get info:
+   <form name="mid" action="javascript:window.open('/{{ entity.url }}/'+document.forms['mid'].elements['id'].value,'_self')">
+      Id: <input value="123" name="id" type="number" min="1"/>
+      <input type="submit" value="get"/>
+   </form>
+</p>
+<br>
+{% endfor %} 
+-->
+<header>
+    <h1>Tabelas</h1>
+</header>
+
+<h2>Entidades</h2>
+
+<p>
+    <a href="/list/Entidade/">List all</a>
+ </p>
+ <p>Informação sobre a entidade:
+ <form name="entidadeForm" action="javascript:window.open('/list/Entidade/'+document.forms['entidadeForm'].elements['CODEntidade'].value,'_self')">
+    Código Entidade: <input value="" class="input" name="CODEntidade" type="number" min="1"/><input type="submit" value="get"/>
+ </form>
+ </p>
+
+<br>
+
+<h2>Localização</h2>
+
+<p>
+    <a href="/list/Localizacao/">List all</a>
+ </p>
+ <p>Informação sobre a localização:
+ <form name="localizacaoForm" action="javascript:window.open('/list/Localizacao/'+document.forms['localizacaoForm'].elements['CODEntidade'].value,'_self')">
+    Código Entidade: <input value="" name="CODEntidade" type="number" min="1"/><input type="submit" value="get"/>
+ </form>
+ </p>
+
+ <br>
+
+ <h2>Concelho</h2>
+
+<p>
+    <a href="/list/Concelho/">List all</a>
+ </p>
+ <p>Informação sobre o concelho:
+ <form name="concelhoForm" action="javascript:window.open('/list/Concelho/'+document.forms['concelhoForm'].elements['CODConcelho'].value,'_self')">
+    Código Concelho: <input value="" name="CODConcelho" type="number" min="1"/><input type="submit" value="get"/>
+ </form>
+ </p>
+
+ <br>
+
+ <h2>Distrito</h2>
+
+<p>
+    <a href="/list/Distrito/">List all</a>
+ </p>
+ <p>Informação sobre o distrito:
+ <form name="distritoForm" action="javascript:window.open('/list/Distrito/'+document.forms['distritoForm'].elements['CODDistrito'].value,'_self')">
+    Código Distrito: <input value="" name="CODDistrito" type="number" min="1"/><input type="submit" value="get"/>
+ </form>
+ </p>
+
+ <br>
+
+ <h2>Organização</h2>
+
+<p>
+    <a href="/list/Organizacao/">List all</a>
+ </p>
+ <p>Informação sobre a organização:
+ <form name="organizacaoForm" action="javascript:window.open('/list/Organizacao/'+document.forms['organizacaoForm'].elements['CODOrganizacao'].value,'_self')">
+    Código Organização: <input value="" name="CODOrganizacao" type="number" min="1"/><input type="submit" value="get"/>
+ </form>
+ </p>
+
+ <br>
+
+ <h2>Escola</h2>
+
+<p>
+    <a href="/list/Escola/">List all</a>
+ </p>
+ <p>Informação sobre a Escola:
+ <form name="escolaForm" action="javascript:window.open('/list/Escola/'+document.forms['escolaForm'].elements['CODEscola'].value,'_self')">
+    Código Escola: <input value="" name="CODEscola" type="number" min="1"/><input type="submit" value="get"/>
+ </form>
+ </p>
+
+ <br>
+
+ <h2>Agrupamento</h2>
+
+<p>
+    <a href="/list/Agrupamento/">List all</a>
+ </p>
+ <p>Informação sobre o Agrupamento:
+ <form name="agrupamentoForm" action="javascript:window.open('/list/Agrupamento/'+document.forms['agrupamentoForm'].elements['CODAgrupamento'].value,'_self')">
+    Código Agrupamento: <input value="" name="CODAgrupamento" type="number" min="1"/><input type="submit" value="get"/>
+ </form>
+ </p>
+
+ <br>
+
+ <h2>Escola Sede</h2>
+
+<p>
+    <a href="/list/EscolaSede/">List all</a>
+ </p>
+ <p>Informação sobre a Escola Sede:
+ <form name="escolasedeForm" action="javascript:window.open('/list/EscolaSede/'+document.forms['escolasedeForm'].elements['CODEscolaSede'].value,'_self')">
+    Código Escola Sede: <input value="" name="CODEscolaSede" type="number" min="1"/><input type="submit" value="get"/>
+ </form>
+ </p>
+
+ <br>
+
+ <h2>NutsIII</h2>
+
+<p>
+    <a href="/list/NUTSIII/">List all</a>
+ </p>
+ <p>Informação sobre NUTSIII:
+ <form name="nutsiiiForm" action="javascript:window.open('/list/NUTSIII/'+document.forms['nutsiiiForm'].elements['CODNUTSIII'].value,'_self')">
+   Código NUTSIII: <input value="" name="CODNUTSIII" type="number" min="1"/><input type="submit" value="get"/>
+ </form>
+ </p>
+
+</br>
+
+<h2>NutsII</h2>
+
+<p>
+    <a href="/list/NUTSII/">List all</a>
+ </p>
+ <p>Informação sobre NUTSII:
+ <form name="nutsiiForm" action="javascript:window.open('/list/NUTSII/'+document.forms['nutsiiForm'].elements['CODNUTSII'].value,'_self')">
+   Código NUTSII: <input value="" name="CODNUTSII" type="number" min="1"/><input type="submit" value="get"/>
+ </form>
+ </p>
+ 
+ <br>
+
+<h2>Inscrições</h2>
+
+<p>
+    <a href="/list/Inscricoes/">List all</a>
+ </p>
+ <p>Informação sobre Inscrições:
+ <form name="inscricoesForm" action="javascript:window.open('/list/Inscricoes/'+document.forms['inscricoesForm'].elements['CODEntidade'].value,'_self')">
+   Código Entidade: <input value="" name="CODEntidade" type="number" min="1"/><input type="submit" value="get"/>
+ </form>
+ </p> 
+ 
+ <br>
+
+<h2>Ano de Escolaridade</h2>
+
+<p>
+<a href="/list/AnoEscolaridade/">List all</a>
+</p>
+<p>Informação sobre o Ano de Escolaridade:
+<form name="anoescolaridadeForm" action="javascript:window.open('/list/AnoEscolaridade/'+document.forms['anoescolaridadeForm'].elements['CODAnoEscolaridade'].value,'_self')">
+   Código Ano de Escolaridade: <input value="" name="CODAnoEscolaridade" type="number" min="1"/><input type="submit" value="get"/>
+</form>
+</p>
+
+
+ <br>
+
+<h2>Nível de Ensino</h2>
+
+<p>
+<a href="/list/NivelEnsino/">List all</a>
+</p>
+<p>Informação sobre o Nível de Ensino:
+<form name="nivelensinoForm" action="javascript:window.open('/list/NivelEnsino/'+document.forms['nivelensinoForm'].elements['CODNivelEnsino'].value,'_self')">
+   Código Nível de Ensino: <input value="" name="CODNivelEnsino" type="number" min="1"/><input type="submit" value="get"/>
+</form>
+</p>
+
+<br>
+
+<h2>Oferta</h2>
+
+<p>
+<a href="/list/Oferta/">List all</a>
+</p>
+<p>Informação sobre a Oferta:
+<form name="ofertaForm" action="javascript:window.open('/list/Oferta/'+document.forms['ofertaForm'].elements['CODOferta'].value,'_self')">
+   Código Oferta: <input value="" name="CODOferta" type="number" min="1"/><input type="submit" value="get"/>
+</form>
+</p>
+
+<br>
+
+<h2>Cursos</h2>
+
+<p>
+<a href="/list/Cursos/">List all</a>
+</p>
+<p>Informação sobre o Curso:
+<form name="cursosForm" action="javascript:window.open('/list/Cursos/'+document.forms['cursosForm'].elements['CODCurso'].value,'_self')">
+   Código Curso: <input value="" name="CODCurso" type="number" min="1"/><input type="submit" value="get"/>
+</form>
+</p>
+
+<br>
+
+<h2>Orientação</h2>
+
+<p>
+<a href="/list/Orientacao/">List all</a>
+</p>
+<p>Informação sobre a Orientação:
+<form name="orientacaoForm" action="javascript:window.open('/list/Orientacao/'+document.forms['orientacaoForm'].elements['CODOrganizacao'].value,'_self')">
+   Código Orientação: <input value="" name="CODOrganizacao" type="number" min="1"/><input type="submit" value="get"/>
+</form>
+</p>
+
+<br>
+
+<h2>Ciclo de Estudos</h2>
+
+<p>
+<a href="/list/CicloEstudos/">List all</a>
+</p>
+<p>Informação sobre o Ciclo de Estudos:
+<form name="cicloestudosForm" action="javascript:window.open('/list/CicloEstudos/'+document.forms['cicloestudosForm'].elements['CODCicloEstudos'].value,'_self')">
+   Código Ciclo de Estudos: <input value="" name="CODCicloEstudos" type="number" min="1"/><input type="submit" value="get"/>
+</form>
+</p>
+
+<br>
+
+<h2>Sexo</h2>
+
+<p>
+<a href="/list/Sexo/">List all</a>
+</p>
+<p>Informação sobre o Sexo:
+<form name="sexoForm" action="javascript:window.open('/list/Sexo/'+document.forms['sexoForm'].elements['CODSexo'].value,'_self')">
+   Código Sexo: <input value="" name="CODSexo" type="number" min="1"/><input type="submit" value="get"/>
+</form>
+</p>
+
+{% endblock %}
